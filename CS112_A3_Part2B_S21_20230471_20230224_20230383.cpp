@@ -823,7 +823,7 @@ int main() {
     
         else if (pick == "0") {
             cout << "## Thanks for using our program ##";
-            return 0;
+            break;
         }
     }
     return 0;
