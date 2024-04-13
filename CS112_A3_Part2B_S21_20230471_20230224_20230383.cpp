@@ -3,35 +3,17 @@
 // Marwan Khaled - 20230383 - Flip image filter - Sunlight filter - Resize Filter - Black and white filter - Crop filter
 // https://github.com/yiritoo/Image-filters-project
 
+#include <iostream>
+#include <fstream>
 #include <bits/stdc++.h>
+#include <string>
+#include <limits>
 #include "Image_Class.h"
 using namespace std;
 
-void loadimage(Image& image){
-    string filename;
-    ifstream file;
-    while (true) {
-        try {
-            cout << "Enter the file name of a colored image: ";
-            cin >> filename;
-
-            // Trying to open file to check if it exists
-            file.open(filename);
-
-            if (!file.is_open()) {
-                throw runtime_error("Please enter a valid file name with correct extension:");
-            }
-            break;
-
-        } catch (const runtime_error &e) {
-            cerr << e.what() << endl;
-        }
-    }
-    file.close();
-    image.loadNewImage(filename);
-}
-
+// Function for saving image
 void Saveimage(Image& image, string& filename){
+
     cout << "1- Replace existing image\n";
     cout << "2- Save Image in a new file\n";
     cout << "3- Close\n";
@@ -72,22 +54,7 @@ void inverseColors(Image& image) {
     }
 }
 
-void rotateImage(Image& image) {
-    int rotatepick;
-    cout << "How much would you like to rotate your image?\n";
-    cout << "1- 90°\n";
-    cout << "2- 180°\n";
-    cout << "3- 270°\n";
-    cin >> rotatepick;
-
-    while ((rotatepick != 1) && (rotatepick != 2) && (rotatepick != 3)) { // A loop that makes the user choose a valid choice
-        cout << "Invalid choice. Please choose the amount of image rotation: \n";
-        cout << "1- 90°\n";
-        cout << "2- 180°\n";
-        cout << "3- 270°\n";
-        cin >> rotatepick;
-    }
-
+void rotateImage(Image& image, int rotatepick) {
     Image newImage;
     if (rotatepick == 1) {
         Image newImage(image.height, image.width);
@@ -124,14 +91,7 @@ void rotateImage(Image& image) {
     }
 }
 
-void flipImage(Image& image) {
-    string choose;
-    cout << "Please choose the type of image flipping: \n1) Horizontal \n2) Vertical\n";
-    cin >> choose;
-    while ((choose != "1") && (choose != "2")) { // A loop that makes the user choose a valid choice
-        cout << "Invalid choice. Please choose the type of image flipping: \n1) Horizontal \n2) Vertical\n";
-        cin >> choose;
-    }
+void flipImage(Image& image, const string& choose) {
     if (choose == "1") { // Horizontal Flip
         for (int i = 0; i < image.width / 2; i++) {
             for (int j = 0; j < image.height; j++) {
@@ -169,10 +129,7 @@ void grayscale(Image& image) {
     }
 }
 
-void darkenLighten(Image& image) {
-    string colour;
-    cout << "To choose type Darken or Lighten: \n";
-    cin >> colour;
+void darkenLighten(Image& image, const string& colour) {
     if (colour == "Darken" || colour == "darken") {
         for (int i = 0; i < image.width; ++i) {
             for (int j = 0; j < image.height; ++j) {
@@ -346,6 +303,7 @@ void Frame(Image& image){
     cout << "4- White\n";
     cout << "5- Black\n";
     cin >> frameaccentpick;
+
     switch (frameaccentpick){
         case 1:
             frameaccentR = 255;
@@ -387,6 +345,7 @@ void Frame(Image& image){
     cout << "1- Simple\n";
     cout << "2- Fancy\n";
     cin >> framepick;
+
     int cornerRadius;
 
     switch (framepick){
@@ -482,6 +441,7 @@ void Frame(Image& image){
             cout << "Invalid choice, please select a valid choice\n";
             cout << "1- Simple\n";
             cout << "2- Fancy\n";
+            cin >> framepick;
             break;
     }
 }
@@ -738,93 +698,143 @@ void DetectEdges(Image& image) {
 }
 
 int main() {
-    cout << "\n## Welcome to Image Filtering Program ##\n";
     Image image;
     string filename;
-    string pick;
-
     while (true) {
-        cout << "\n 1- Load image | 2- Save image\n\n 3- Inverse colors filter | 4- Rotate image\n\n 5- Flip image | 6- Grayscale filter\n\n 7- Darken/lighten image | 8- Infrared Filter\n\n 9- Blur image | 10- Image Frame\n\n 11- Merge | 12- Purple filter\n\n 13- Sunlight filter | 14- Black/White filter\n\n 15- Resize image | 16- Crop image\n\n 17- Detect Edges | 0- Exit program\n\n Choose a choice from previous choices:\n";
-    
-        while (!(cin >> pick) || (pick != "0" && pick != "1" && pick != "2" && pick != "3" && pick != "4" && pick != "5" && pick != "6" && pick != "7" && pick != "8"  && pick != "9" && pick != "10" && pick != "11" && pick != "12" && pick != "13" && pick != "14" && pick != "15" && pick != "16" && pick != "17")) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "\n 1- Load image | 2- Save image\n\n 3- Inverse colors filter | 4- Rotate image\n\n 5- Flip image | 6- Grayscale filter\n\n 7- Darken/lighten image | 8- Infrared Filter\n\n 9- Blur image | 10- Image Frame\n\n 11- Merge | 12- Purple filter\n\n 13- Sunlight filter | 14- Black/White filter\n\n 15- Resize image | 16- Crop image\n\n 17- Detect Edges | 0- Exit program\n\n Invalid choice. Choose a choice from previous choices:\n";
+        cout << "\n『•• Welcome To The Image Filtering Program ••』\n";
+        int pick;
+        cout << "\n 1- Load image | 2- Save image\n\n 3- Inverse colors filter | 4- Rotate image\n\n 5- Flip image | 6- Grayscale filter\n\n 7- Darken/lighten image | 8- Infrared Filter\n\n 9- Blur image | 10- Image Frame\n\n 11- Merge | 12- Purple filter\n\n 13- Sunlight filter | 14- Black/White filter\n\n 15- Resize image | 16- Crop image\n\n 17- Detect Edges | 0- Exit program\n\n";
+        while (true) {
+            if (cin >> pick && pick >= 0 && pick <= 17) {
+                break;
+            } 
+            else {
+                cout << "Invalid input. Please enter a number between 0 and 17: ";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
         }
-    
-        if (pick == "1"){
-            loadimage(image);
+
+        if (pick == 1){
+            ifstream file;
+            while (true) {
+                try {
+                    cout << "Enter the file name of a colored image: ";
+                    cin >> filename;
+
+                    // Trying to open file to check if it exists
+                    file.open(filename);
+
+                    if (!file.is_open()) {
+                        throw runtime_error("Please enter a valid file name with correct extension");
+                    }
+                    break;
+
+                } catch (const runtime_error &e) {
+                    cerr << e.what() << endl;
+                }
+            }
+            file.close();
+            image.loadNewImage(filename);
         }
-    
-        else if (pick == "2"){
+
+        else if (pick == 2){
             Saveimage(image, filename);
         }
-    
-        else if (pick == "3") {
+
+        else if (pick == 3) {
             inverseColors(image);
         }
-    
-        else if (pick == "4") {
-            rotateImage(image);
+
+        else if (pick == 4) {
+            int rotatepick;
+            cout << "How much would you like to rotate your image?\n";
+            cout << "1- 90°\n";
+            cout << "2- 180°\n";
+            cout << "3- 270°\n";
+            cin >> rotatepick;
+
+            while ((rotatepick != 1) && (rotatepick != 2) && (rotatepick != 3)) { // A loop that makes the user choose a valid choice
+                cout << "Invalid choice. Please choose the amount of image rotation: \n";
+                cout << "1- 90°\n";
+                cout << "2- 180°\n";
+                cout << "3- 270°\n";
+                cin >> rotatepick;
+            }
+            rotateImage(image, rotatepick);
         }
-    
-        else if (pick == "5") {
-            flipImage(image);
+
+        else if (pick == 5) {
+            string choose;
+            cout << "Please choose the type of image flipping: \n1) Horizontal \n2) Vertical\n";
+            cin >> choose;
+            while ((choose != "1") && (choose != "2")) { // A loop that makes the user choose a valid choice
+                cout << "Invalid choice. Please choose the type of image flipping: \n1) Horizontal \n2) Vertical\n";
+                cin >> choose;
+            }
+            flipImage(image, choose);
         }
-    
-        else if (pick == "6") {
+
+        else if (pick == 6) {
             grayscale(image);
         }
-    
-        else if (pick == "7") {
-            darkenLighten(image);
+
+        else if (pick == 7) {
+            string colour;
+            cout << "To choose type Darken or Lighten: \n";
+            cin >> colour;
+            while ((colour != "darken") && (colour != "lighten") && (colour != "Lighten") && (colour != "Darken")){
+                cout << "Invalid choice. Please type either Darken or Lighten: \n";
+                cin >> colour;
+            }
+            darkenLighten(image, colour);
         }
-    
-        else if (pick == "8") {
+
+        else if (pick == 8){
             Infrared(image);
         }
-    
-        else if (pick == "9") {
+
+        else if (pick == 9){
             blurImage(image);
         }
-    
-        else if (pick == "10") {
+
+        else if (pick == 10) {
             Frame(image);
         }
-    
-        else if (pick == "11"){
+
+        else if (pick == 11){
             string filename2;
             Merge(image, filename2);
         }
-    
-        else if (pick == "12"){
+
+        else if (pick == 12){
             Purple(image);
         }
-    
-        else if (pick == "13"){
+
+        else if (pick == 13){
             Sunlight(image);
         }
-    
-        else if (pick == "14"){
+
+        else if (pick == 14){
             blackandwhite(image);
         }
-    
-        else if (pick == "15"){
+
+        else if (pick == 15){
             Resize(image);
         }
-    
-        else if (pick == "16"){
+
+        else if (pick == 16){
             Crop(image);
         }
-    
-        else if (pick == "17"){
+
+        else if (pick == 17){
             DetectEdges(image);
         }
-    
-        else if (pick == "0") {
-            cout << "## Thanks for using our program ##";
+
+        else if (pick == 0) {
+            cout << "Exiting the program...";
             break;
         }
     }
-    return 0;
+return 0;
 }
