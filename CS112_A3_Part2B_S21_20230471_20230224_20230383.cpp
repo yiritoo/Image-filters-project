@@ -1,6 +1,7 @@
 // Yassen elsayed Kamal - 20230471 - Inverted colors filter - Rotate image filter - Blur image filter - Image frame filter - Infrared Filter
 // Abdullah Ahmed - 20230224 - Grayscale filter - Darken and lighten filters - Purple filter - Merge images - Edge detection filter
 // Marwan Khaled - 20230383 - Flip image filter - Sunlight filter - Resize Filter - Black and white filter - Crop filter
+// https://drive.google.com/drive/u/0/folders/1keBVDo1Z1SmInZrtIQo4SipA1jOb6u36 (System diagram for the Program)
 // https://github.com/yiritoo/Image-filters-project
 
 #include <iostream>
@@ -42,6 +43,30 @@ void Saveimage(Image& image, string& filename){
         cout << "Terminating program";
         exit(0);
     }
+}
+
+// Function for loading images
+void loadimage(Image& image, string& filename){
+    ifstream file;
+    while (true) {
+        try {
+            cout << "Enter the file name of a colored image: ";
+            cin >> filename;
+
+            // Trying to open file to check if it exists
+            file.open(filename);
+
+            if (!file.is_open()) {
+                throw runtime_error("Please enter a valid file name with correct extension");
+            }
+            break;
+
+        } catch (const runtime_error &e) {
+            cerr << e.what() << endl;
+        }
+    }
+    file.close();
+    image.loadNewImage(filename);
 }
 
 void inverseColors(Image& image) {
@@ -716,26 +741,7 @@ int main() {
         }
 
         if (pick == 1){
-            ifstream file;
-            while (true) {
-                try {
-                    cout << "Enter the file name of a colored image: ";
-                    cin >> filename;
-
-                    // Trying to open file to check if it exists
-                    file.open(filename);
-
-                    if (!file.is_open()) {
-                        throw runtime_error("Please enter a valid file name with correct extension");
-                    }
-                    break;
-
-                } catch (const runtime_error &e) {
-                    cerr << e.what() << endl;
-                }
-            }
-            file.close();
-            image.loadNewImage(filename);
+            loadimage(image, filename);
         }
 
         else if (pick == 2){
