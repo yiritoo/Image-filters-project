@@ -21,10 +21,11 @@ void Saveimage(Image& image, string& filename){
     int choice;
     cin >> choice;
 
-    if (choice == 1){// Saving in Same File
+    if (choice == 1) {// Saving in Same File
         image.saveImage(filename);
+        (void)system(filename.c_str());
     }
-    else if (choice == 2){ // Saving in New File
+    else if (choice == 2) { // Saving in New File
         cout << "Enter a new name to store new image: ";
         cin >> filename;
 
@@ -38,6 +39,7 @@ void Saveimage(Image& image, string& filename){
                 cin >> filename ;
             }
         }
+        (void)system(filename.c_str());
     }
     else if (choice == 3){
         cout << "Terminating program";
@@ -91,7 +93,7 @@ void rotateImage(Image& image, int rotatepick) {
             }
         }
         image = newImage;
-        
+
     } else if (rotatepick == 2) {
         Image newImage(image.width, image.height);
         for (int i = 0; i < image.width; ++i) {
@@ -228,7 +230,7 @@ void blurImage(Image& image) {
     // Calculate the average dimension of the image
     int averageDimension = (image.width + image.height) / 2;
     const int maxDimension = 3000;
-    
+
     // Calculate the blur radius using the average dimension
     int radius = (averageDimension * 20) / maxDimension;
 
@@ -383,8 +385,8 @@ void Frame(Image& image){
                             image(i, j, 0) = frameR;
                             image(i, j, 1) = frameG;
                             image(i, j, 2) = frameB;
-                        } 
-                        // Draw outer part of the frame
+                        }
+                            // Draw outer part of the frame
                         else {
                             image(i, j, 0) = frameaccentR;
                             image(i, j, 1) = frameaccentG;
@@ -405,14 +407,14 @@ void Frame(Image& image){
                         image(i, j, 1) = frameaccentG;
                         image(i, j, 2) = frameaccentB;
                     }
-                    // Draw the second outer frame
+                        // Draw the second outer frame
                     else if ((i < frameSize - 20 || i >= image.width - frameSize + 20 || j < frameSize - 20 || j >= image.height - frameSize + 20) &&
-                            !(i < frameSize - 40 || i >= image.width - frameSize + 40 || j < frameSize - 40 || j >= image.height - frameSize + 40)) {
+                             !(i < frameSize - 40 || i >= image.width - frameSize + 40 || j < frameSize - 40 || j >= image.height - frameSize + 40)) {
                         image(i, j, 0) = frameaccentR;
                         image(i, j, 1) = frameaccentG;
                         image(i, j, 2) = frameaccentB;
                     }
-                    // Draw the inner part of the frame
+                        // Draw the inner part of the frame
                     else if (i < frameSize + 20 || i >= image.width - frameSize + 20 || j < frameSize + 20 || j >= image.height - frameSize + 20) {
                         image(i, j, 0) = frameR;
                         image(i, j, 1) = frameG;
@@ -442,17 +444,17 @@ void Frame(Image& image){
                         image(i, j, 0) = frameaccentR;
                         image(i, j, 1) = frameaccentG;
                         image(i, j, 2) = frameaccentB;
-                        
+
                         // Top-right corner
                         image(image.width - i - 1, j, 0) = frameaccentR;
                         image(image.width - i - 1, j, 1) = frameaccentG;
                         image(image.width - i - 1, j, 2) = frameaccentB;
-                        
+
                         // Bottom-left corner
                         image(i, image.height - j - 1, 0) = frameaccentR;
                         image(i, image.height - j - 1, 1) = frameaccentG;
                         image(i, image.height - j - 1, 2) = frameaccentB;
-                        
+
                         // Bottom-right corner
                         image(image.width - i - 1, image.height - j - 1, 0) = frameaccentR;
                         image(image.width - i - 1, image.height - j - 1, 1) = frameaccentG;
@@ -461,7 +463,7 @@ void Frame(Image& image){
                 }
             }
             break;
-            
+
         default:
             cout << "Invalid choice, please select a valid choice\n";
             cout << "1- Simple\n";
@@ -621,7 +623,7 @@ void Resize(Image& image){
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid input. Please enter the dimensions of resized image:\n";
     }
-    
+
     Image resizedImage(a, b);
 
     double ratioX = double(image.width) / a;
@@ -670,7 +672,7 @@ void Crop (Image& image){
                 croppedImage.setPixel(i, j, k, image.getPixel(x + i, y + j, k));
             }
         }
-    }   
+    }
     image = croppedImage;
 }
 
@@ -732,7 +734,7 @@ int main() {
         while (true) {
             if (cin >> pick && pick >= 0 && pick <= 17) {
                 break;
-            } 
+            }
             else {
                 cout << "Invalid input. Please enter a number between 0 and 17: ";
                 cin.clear();
@@ -842,5 +844,5 @@ int main() {
             break;
         }
     }
-return 0;
+    return 0;
 }
